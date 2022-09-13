@@ -13,43 +13,33 @@ int edit_distance(int i, int j) {
 	auto& ret = mem[i][j];
 	if (ret != -1) return ret;
 	if (s1[i] != s2[j])
-		return ret = 1 + min({
+		return ret = 1 + min(
 				edit_distance(i + 1,j + 1), // Change
-				edit_distance(i + 1, j),// Delete
-				edit_distance(i, j + 1), // Insert
-			});
+				min(
+					edit_distance(i + 1, j), // Delete
+					edit_distance(i, j + 1) // Insert
+				) 
+			);
 	else
 		return edit_distance(i + 1, j + 1);
 }
 
 void dp_output(int i, int j) {
 	if (i == s1.size()) {
-		bool print = false;
-		if (j < s2.size()) print = true;
-		string res = "Insert ";
-		while (j < s2.size())
-		{
-			res = res + "(" + s2[j] + "),";
-			++j;
-		}
-		if (print) {
-			res.pop_back();
-			cout << res << '\n';
+		string charsToInsert{ s2.substr(j) };
+		if (charsToInsert.empty()) return;
+		cout << "Insert ";
+		for (int i = 0; i < charsToInsert.size(); ++i) {
+			cout << (i > 0 ? ", " : "") << "'" << charsToInsert[i] << "'";
 		}
 		return;
 	}
 	if (j == s2.size()) {
-		bool print = false;
-		if (i < s1.size()) print = true;
-		string res = "Delete ";
-		while (i < s1.size())
-		{
-			res =  res + "(" + s1[i] + "),";
-			++i;
-		}
-		if (print) {
-			res.pop_back();
-			cout << res << '\n';
+		string charsToDelete{ s1.substr(i) };
+		if (charsToDelete.empty()) return;
+		cout << "Delete ";
+		for (int i = 0; i < charsToDelete.size(); ++i) {
+			cout << (i > 0 ? ", " : "") << "'" << charsToDelete[i] << "'";
 		}
 		return;
 	}
@@ -59,15 +49,15 @@ void dp_output(int i, int j) {
 		int insert = 1 + edit_distance(i, j + 1);
 		int remove = 1 + edit_distance(i + 1, j);
 		if (change == opt) {
-			cout << "Change (" << s1[i] << ") to (" << s2[j] << ")\n";
+			cout << "Change '" << s1[i] << "' to '" << s2[j] << "'\n";
 			dp_output(i + 1, j + 1);
 		}
 		else if (insert == opt) {
-			cout << "Insert (" << s2[j] << ")\n";
+			cout << "Insert '" << s2[j] << "'\n";
 			dp_output(i, j + 1);
 		}
 		else {
-			cout << "Delete (" << s1[i] << ")\n";
+			cout << "Delete '" << s1[i] << "'\n";
 			dp_output(i + 1, j);
 		}
 	}
@@ -85,5 +75,7 @@ void minChange(const string& _s1, const string& _s2) {
 
 
 int main() {
-	minChange("spakehz", "park");
+	 minChange("dpp", "h");
+
+
 }
