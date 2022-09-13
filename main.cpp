@@ -75,7 +75,7 @@ void minChange(const string& _s1, const string& _s2) {
 
 
 int main() {
-	 minChange("dpp", "h");
+	 minChange("horse", "ros");
 
 
 }
